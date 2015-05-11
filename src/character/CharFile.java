@@ -1,7 +1,11 @@
 package character;
 
 import java.io.File;
-
+/*
+ * Extended File class
+ * 
+ * Mostly just because I needed a usable compare method
+ */
 public class CharFile extends File{
 	
 	private String title;
