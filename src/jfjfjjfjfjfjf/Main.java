@@ -1,8 +1,11 @@
 package jfjfjjfjfjfjf;
 
 import java.awt.Frame;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import character.Charries;
 public class Main {
@@ -21,8 +24,10 @@ public class Main {
 //		System.out.println(b);
 //		
 //		System.exit(0);
-//		
-		ArrayList<Charries> chars = realConstr();
+		
+		ArrayList<Charries> chars = testConstr();
+		
+//		ArrayList<Charries> chars = realConstr();
 		
 	}
 	
@@ -33,6 +38,17 @@ public class Main {
 	}
 	
 	//actual character file reading
+	/*
+	 * Aight gotta write down me thoughts
+	 * So the constructor reads from "MasterList.txt"
+	 * MasterList contains all the character names, thus the master list
+	 * each character name has a separate corresponding txt file with their information in it
+	 * and the constructor reads that information and passes it into a Charries class in the ArrayList
+	 * 
+	 * inf order: name, gender, age, race, setting (NGARS)
+	 * 
+	 * got it mate?
+	 */
 	public static ArrayList<Charries> realConstr()
 	{
 		
@@ -41,8 +57,35 @@ public class Main {
 	}
 	
 	//makes a test list of characters
-	public static ArrayList<Charries> testConstr()
+	/*
+	 * uses "MasterList_test.txt" so that I have a buncha charries to work with yeh know
+	 */
+	public static ArrayList<Charries> testConstr() throws FileNotFoundException
 	{
+		ArrayList<Charries> derp = new ArrayList<Charries>();
+		
+		File master = new File("MasterList_Test.txt");
+		Scanner scan = new Scanner(master);
+		
+		while(scan.hasNext())
+		{
+			String n = scan.nextLine();
+			String g = "", r = "", s = "";
+			int a = -1;
+			File inf = new File(n + "\\inf.txt");
+			
+			Scanner read = new Scanner(inf);
+			
+			while(read.hasNext())
+			{
+				g = read.nextLine();
+				a = read.nextInt();
+				r = read.nextLine();
+				s = read.nextLine();
+			}
+			
+			derp.add(new Charries(n, g, a, r, s));
+		}
 		return null;
 	}
 

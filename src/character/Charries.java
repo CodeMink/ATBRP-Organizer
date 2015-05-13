@@ -25,6 +25,10 @@ public class Charries {
 	private ArrayList<File> archive = new ArrayList<File>();
 	private File codex = null, appl = null;
 	
+	public Charries(String n)
+	{
+		name = n;
+	}
 	
 	public Charries(String n, String g, int a, String r, String s)
 	{
