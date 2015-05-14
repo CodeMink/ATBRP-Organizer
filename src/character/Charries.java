@@ -93,6 +93,16 @@ public class Charries {
 		return race;
 	}
 	
+	public File getCodex()
+	{
+		return codex;
+	}
+	
+	public File getApp()
+	{
+		return appl;
+	}
+	
 	public String getSet()
 	{
 		return setting;

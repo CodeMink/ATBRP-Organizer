@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 import character.Charries;
 public class Main {
 
@@ -15,20 +17,19 @@ public class Main {
 		Frame frame = new Frame();
 		frame.setBounds(200, 200, 500, 500);
 		
-//		String[] chars = {"Herpicar Derpicus", "Doop de durr", "Whoopee Goldbegr"};
-//		int b;
-//		//String a = (String) JOptionPane.showInputDialog(frame, "WHAt", "/???", -1, null, chars, "Herpicar Derpicus");
-//		
-//		b = JOptionPane.showConfirmDialog(frame, "FUCK Y");
-//		
 //		System.out.println(b);
-//		
-//		System.exit(0);
 		
-		ArrayList<Charries> chars = testConstr();
+		ArrayList<Charries> chars = Constr(new File("MasterList_Test.txt"));
 		
-//		ArrayList<Charries> chars = realConstr();
+		String[] names = new String[chars.size()];
+		for(int i = 0; i < chars.size(); i++)
+		{
+			names[i] = chars.get(i).getName();
+		}
 		
+		String a = (String) JOptionPane.showInputDialog(frame, "WHAt", "/???", -1, null, names, "Herpicar Derpicus");
+		
+		System.exit(0);
 	}
 	
 	//start menu implementation
@@ -49,22 +50,9 @@ public class Main {
 	 * 
 	 * got it mate?
 	 */
-	public static ArrayList<Charries> realConstr()
-	{
-		
-		
-		return null;
-	}
-	
-	//makes a test list of characters
-	/*
-	 * uses "MasterList_test.txt" so that I have a buncha charries to work with yeh know
-	 */
-	public static ArrayList<Charries> testConstr() throws FileNotFoundException
+	public static ArrayList<Charries> Constr(File master) throws IOException
 	{
 		ArrayList<Charries> derp = new ArrayList<Charries>();
-		
-		File master = new File("MasterList_Test.txt");
 		Scanner scan = new Scanner(master);
 		
 		while(scan.hasNext())
@@ -73,20 +61,55 @@ public class Main {
 			String g = "", r = "", s = "";
 			int a = -1;
 			File inf = new File(n + "\\inf.txt");
+			Charries c;
 			
 			Scanner read = new Scanner(inf);
 			
 			while(read.hasNext())
 			{
 				g = read.nextLine();
-				a = read.nextInt();
+				a = Integer.parseInt(read.nextLine());
 				r = read.nextLine();
 				s = read.nextLine();
 			}
 			
-			derp.add(new Charries(n, g, a, r, s));
+			c = new Charries(n, g, a, r, s);
+			
+			File actL = new File (n + "\\actives\\list.txt");
+			if(!actL.exists())
+				actL.createNewFile();
+			else
+			{
+				read = new Scanner(actL);
+				while(read.hasNext())
+				{
+					c.addActiveThread(new File(n + "\\actives\\" + read.nextLine() + ".txt"));
+				}
+			}
+			
+			File arcL = new File (n + "\\archive\\list.txt");
+			if(!arcL.exists())
+				arcL.createNewFile();
+			else
+			{
+				read = new Scanner(arcL);
+				while(read.hasNext())
+				{
+					c.addArchiveThread(new File(n + "\\archive\\" + read.nextLine() + ".txt"));
+				}
+			}
+			
+			File cod = new File(n + "\\codex.txt");
+			File appl = new File(n + "\\application.txt");
+			
+			if(cod.exists())
+				c.setCodex(cod);
+			if(!appl.exists())
+				c.setApp(appl);
+			
+			derp.add(c);
 		}
-		return null;
+		return derp;
 	}
 
 }
