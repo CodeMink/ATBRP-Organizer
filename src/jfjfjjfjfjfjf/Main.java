@@ -11,15 +11,24 @@ import javax.swing.JOptionPane;
 
 import character.Charries;
 public class Main {
+	
+	private static Frame frame = new Frame();
 
 	public static void main(String[] args) throws IOException {
 		
-		Frame frame = new Frame();
 		frame.setBounds(200, 200, 500, 500);
 		
-//		System.out.println(b);
-		
+		//master list is important IMPORTANT IMPORTANT
 		ArrayList<Charries> chars = Constr(new File("MasterList_Test.txt"));
+		
+		String a = startMenu(chars);
+		
+		System.exit(0);
+	}
+	
+	//start menu implementation
+	public static String startMenu(ArrayList<Charries> chars)
+	{
 		
 		String[] names = new String[chars.size()];
 		for(int i = 0; i < chars.size(); i++)
@@ -27,15 +36,7 @@ public class Main {
 			names[i] = chars.get(i).getName();
 		}
 		
-		String a = (String) JOptionPane.showInputDialog(frame, "WHAt", "/???", -1, null, names, "Herpicar Derpicus");
-		
-		System.exit(0);
-	}
-	
-	//start menu implementation
-	public static int startMenu()
-	{
-		return 0;
+		return (String) JOptionPane.showInputDialog(frame, "WHAt", "/???", -1, null, names, "Herpicar Derpicus");
 	}
 	
 	//actual character file reading
