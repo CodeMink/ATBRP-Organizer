@@ -13,21 +13,33 @@ import character.Charries;
 public class Main {
 	
 	private static Frame frame = new Frame();
-
+	private static ArrayList<Charries> chars;
+	private static String curCharName;
+	private static Charries curChar;
+	
 	public static void main(String[] args) throws IOException {
 		
 		frame.setBounds(200, 200, 500, 500);
 		
-		//master list is important IMPORTANT IMPORTANT
-		ArrayList<Charries> chars = Constr(new File("MasterList_Test.txt"));
+		//file containing list of all character iMPORTANT!!
+		//remember to change it to real non-test file after
+		File master = new File("MasterList_Test.txt");
+		if(!master.exists())
+			master.createNewFile();
 		
-		String a = startMenu(chars);
+		//master list is important IMPORTANT IMPORTANT
+		chars = Constr(master);
+		
+		//"NEW CHARACTER" -> if selected, leads to character creation screen
+		chars.add(new Charries("NEW CHARACTER"));
+		
+		startMenu();
 		
 		System.exit(0);
 	}
 	
 	//start menu implementation
-	public static String startMenu(ArrayList<Charries> chars)
+	public static void startMenu() throws IOException
 	{
 		
 		String[] names = new String[chars.size()];
@@ -36,7 +48,71 @@ public class Main {
 			names[i] = chars.get(i).getName();
 		}
 		
-		return (String) JOptionPane.showInputDialog(frame, "WHAt", "/???", -1, null, names, "Herpicar Derpicus");
+		String a = (String) JOptionPane.showInputDialog(frame, "WHAt", "/???", -1, null, names, "Herpicar Derpicus");
+		
+		if(a.equals("NEW CHARACTER"))
+			a = charCreate();
+		
+		curCharName = a;
+		curChar = new Charries (a);
+		curChar.linkAll();
+		listMenu();
+	}
+	
+	//IMPLEMENT THISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+	//returns name of new character
+	//write down age, name, gender etc. and list it in the inf.txt file
+	public static String charCreate()
+	{
+		//text optionpanes
+		//so disgust
+		
+		
+		return "";
+	}
+	
+	public static String listMenu() throws IOException
+	{
+		String[] options = {"Actives", "Codex", "Application", "Archive", "MAIN MENU", "EXIT"};
+		
+		String choice = (String) JOptionPane.showInputDialog(frame, "NO", "NO", -1, null, options, "");
+		
+		switch(choice)
+		{
+			case "Actives": Runtime.getRuntime().exec("notepad " + activesMenu());
+		}
+		
+		return "";
+	}
+	
+	//dropdown menu of all active threads
+	//choosing one leads to text document for thread, yes?
+	public static String activesMenu()
+	{
+		ArrayList<File> files = curChar.getActives();
+		String[] threads = new String[files.size()];
+		
+		for(int i = 0; i < files.size(); i++)
+		{
+			threads[i] = files.get(i).getName();
+		}
+		
+		String choice = (String) JOptionPane.showInputDialog(frame, "NO", "NO", -1, null, threads, "");
+		
+		String path = "";
+		for(int i = 0; i < files.size(); i++)
+		{
+			if(threads[i].equals(choice))
+				path = files.get(i).getAbsolutePath();
+		}
+		
+		return path;
+	}
+	
+	//same thing as activeMenu, basically
+	public static String archiveMenu()
+	{
+		return "";
 	}
 	
 	//actual character file reading

@@ -1,7 +1,10 @@
 package character;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *  ORIGINAL PRGRM DO NUT STEEL
@@ -68,6 +71,52 @@ public class Charries {
 				archive.remove(i);
 	}
 	
+	//finds and links all associated character files and information to this object
+	//creates the files if there aren't any, so that new characters can work with this shite
+	public void linkAll() throws IOException
+	{
+		Scanner s;
+		
+		//basic info scan
+		File info = new File (name + "\\inf.txt");
+		s = new Scanner(info);
+		
+		gender = s.nextLine();
+		age = Integer.parseInt(s.nextLine());
+		race = s.nextLine();
+		setting = s.nextLine();
+		
+		
+		//links codex and app
+		codex = new File(name + "\\codex.txt");
+		if(!codex.exists())
+			codex.createNewFile();
+		appl = new File(name + "\\app.txt");
+		if(!appl.exists())
+			appl.createNewFile();
+
+		//links actives and archives
+		info = new File(name + "\\actives\\list.txt");
+		if(!info.exists())
+			info.createNewFile();
+		s = new Scanner(info);
+		
+		while(s.hasNextLine())
+		{
+			actives.add(new File(name + "\\actives\\" + s.nextLine()));
+		}
+		
+		info = new File(name + "\\archive\\list.txt");
+		if(!info.exists())
+			info.createNewFile();
+		s = new Scanner(info);
+		
+		while(s.hasNextLine())
+		{
+			archive.add(new File(name + "\\archive\\" + s.nextLine()));
+		}
+	}
+	
 	public void addArchiveThread(File t)
 	{
 		archive.add(t);
@@ -106,6 +155,16 @@ public class Charries {
 	public String getSet()
 	{
 		return setting;
+	}
+	
+	public ArrayList<File> getActives()
+	{
+		return actives;
+	}
+	
+	public ArrayList<File> getArchive()
+	{
+		return archive;
 	}
 	
 	public void setName(String n)
