@@ -2,8 +2,9 @@ package jfjfjjfjfjfjf;
 
 import java.awt.Frame;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -17,13 +18,14 @@ public class Main {
 	private static String curCharName;
 	private static Charries curChar;
 	
+	//file containing list of all character iMPORTANT!!
+	//remember to change it to real non-test file after		
+	private static File master = new File("MasterList_Test.txt");
+	
 	public static void main(String[] args) throws IOException {
 		
 		frame.setBounds(200, 200, 500, 500);
 		
-		//file containing list of all character iMPORTANT!!
-		//remember to change it to real non-test file after
-		File master = new File("MasterList_Test.txt");
 		if(!master.exists())
 			master.createNewFile();
 		
@@ -38,7 +40,8 @@ public class Main {
 		System.exit(0);
 	}
 	
-	//start menu implementation
+	//it's the start menu, what more is there to say?
+	//lists characters, can make new ones
 	public static void startMenu() throws IOException
 	{
 		
@@ -62,15 +65,38 @@ public class Main {
 	//IMPLEMENT THISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 	//returns name of new character
 	//write down age, name, gender etc. and list it in the inf.txt file
-	public static String charCreate()
+	public static String charCreate() throws IOException
 	{
 		//text optionpanes
 		//so disgust
+		String name = (String) JOptionPane.showInputDialog(frame, "WHAt", "/???", -1, null, null, "Enter Name of Character");
+		String age = (String) JOptionPane.showInputDialog(frame, "WHAt", "/???", -1, null, null, "Enter Age of Character IN NUMBERS");
+		String gender = (String) JOptionPane.showInputDialog(frame, "WHAt", "/???", -1, null, null, "Enter Gender of Character");
+		String race = (String) JOptionPane.showInputDialog(frame, "WHAt", "/???", -1, null, null, "Enter Race of character (elf, human, etc. you idiot, I'm not racial profiling)");
+		String setting = (String) JOptionPane.showInputDialog(frame, "WHAt", "/???", -1, null, null, "Enter Setting your character is in");
 		
+		new File(name).mkdir();
+		File info = new File(name + "\\inf.txt");
+		if(!info.exists())
+			info.createNewFile();
 		
-		return "";
+		PrintWriter p = new PrintWriter(info);
+		p.println(gender);
+		p.println(age);
+		p.println(race);
+		p.println(setting);
+		p.flush();
+		
+		//Add character to masterlist
+		//THERE IS WHERE YOU LEFT OFF YOU DIDN'T T]EST IT YET
+		FileWriter f = new FileWriter(master, true);
+		f.append("\n" + name);
+		f.close();
+		
+		return name;
 	}
 	
+	//lists options
 	public static String listMenu() throws IOException
 	{
 		String[] options = {"Actives", "Codex", "Application", "Archive", "MAIN MENU", "EXIT"};
@@ -79,40 +105,63 @@ public class Main {
 		
 		switch(choice)
 		{
-			case "Actives": Runtime.getRuntime().exec("notepad " + activesMenu());
+			case "Actives": Runtime.getRuntime().exec("notepad " + activesMenu(true)); break;
+			case "Codex": Runtime.getRuntime().exec("notepad " + curChar.getCodex().getAbsolutePath()); break;
+			case "Application": Runtime.getRuntime().exec("notepad " + curChar.getApp().getAbsolutePath()); break;
+			case "Archive": Runtime.getRuntime().exec("notepad " + activesMenu(false)); break;
+			case "MAIN MENU": startMenu(); break;
+			default: System.exit(0); break;
+			
 		}
 		
 		return "";
 	}
 	
-	//dropdown menu of all active threads
+	//dropdown menu of all active or archive threads
+	//boolean: true = actives list, false = archive list
 	//choosing one leads to text document for thread, yes?
-	public static String activesMenu()
+	public static String activesMenu(boolean menuChoice) throws IOException
 	{
-		ArrayList<File> files = curChar.getActives();
-		String[] threads = new String[files.size()];
+		ArrayList<File> files;
+		
+		if(menuChoice)
+			files = curChar.getActives();
+		else
+			files = curChar.getArchive();
+		
+		
+		String[] threads = new String[files.size() + 3];
 		
 		for(int i = 0; i < files.size(); i++)
 		{
 			threads[i] = files.get(i).getName();
 		}
 		
+		int con = files.size();
+		
+		threads[con] = "MAIN MENU";
+		threads[con + 1] = "FILES MENU";
+		threads[con + 2] = "EXIT";
+		
 		String choice = (String) JOptionPane.showInputDialog(frame, "NO", "NO", -1, null, threads, "");
 		
-		String path = "";
 		for(int i = 0; i < files.size(); i++)
 		{
 			if(threads[i].equals(choice))
-				path = files.get(i).getAbsolutePath();
+				return files.get(i).getAbsolutePath();
 		}
 		
-		return path;
-	}
-	
-	//same thing as activeMenu, basically
-	public static String archiveMenu()
-	{
-		return "";
+		//implement menu options here
+		switch(choice)
+		{
+			case "MAIN MENU": startMenu(); break;
+			case "FILES MENU": listMenu(); break;
+			case "EXIT": System.exit(0); break;
+			default: System.out.println("u w0t m8"); break;
+		}
+		
+		
+		return "WHAT IS GOING ON";
 	}
 	
 	//actual character file reading

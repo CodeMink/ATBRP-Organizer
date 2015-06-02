@@ -96,6 +96,7 @@ public class Charries {
 			appl.createNewFile();
 
 		//links actives and archives
+		new File(name + "\\actives").mkdir();
 		info = new File(name + "\\actives\\list.txt");
 		if(!info.exists())
 			info.createNewFile();
@@ -106,6 +107,7 @@ public class Charries {
 			actives.add(new File(name + "\\actives\\" + s.nextLine()));
 		}
 		
+		new File(name + "\\archive").mkdir();
 		info = new File(name + "\\archive\\list.txt");
 		if(!info.exists())
 			info.createNewFile();
